@@ -5,6 +5,7 @@ import { logger } from "hono/logger";
 import { PrismaClient } from "@prisma/client";
 import userRouter from "./routes/userRoutes.js";
 import authRouter from "./routes/authRoutes.js";
+import fileRouter from "./routes/fileRoutes.js";
 import { rateLimitMiddleware } from "./middlewares/rateLimitMiddleware";
 import { errorHandler } from "./middlewares/errorHandler";
 
@@ -41,6 +42,7 @@ app.get("/", (c) => {
 // Routes
 app.route("/api/auth", authRouter);
 app.route("/api/users", userRouter);
+app.route("/api/files", fileRouter);
 
 // Error Handling
 app.onError(errorHandler);

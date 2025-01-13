@@ -20,6 +20,19 @@ model User {
   name      String
   password  String
   role      String   @default("user")
+  files     File[] // Relasi dengan File
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model File {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  filename  String
+  path      String
+  mimetype  String
+  size      Int
+  userId    String   @db.ObjectId
+  user      User     @relation(fields: [userId], references: [id]) // Reference the User model
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
