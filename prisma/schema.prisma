@@ -15,14 +15,18 @@ datasource db {
 
 // Model User
 model User {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  email     String   @unique
-  name      String
-  password  String
-  role      String   @default("user")
-  files     File[] // Relasi dengan File
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id                   String    @id @default(auto()) @map("_id") @db.ObjectId
+  email                String    @unique
+  name                 String
+  password             String
+  role                 String    @default("user")
+  isEmailVerified      Boolean   @default(false)
+  verificationToken    String?
+  resetPasswordToken   String?
+  resetPasswordExpires DateTime?
+  files                File[] // Relasi dengan File
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
 }
 
 model File {
@@ -32,7 +36,7 @@ model File {
   mimetype  String
   size      Int
   userId    String   @db.ObjectId
-  user      User     @relation(fields: [userId], references: [id]) // Reference the User model
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade) // Reference the User model
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
