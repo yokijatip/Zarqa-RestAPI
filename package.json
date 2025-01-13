@@ -1,0 +1,26 @@
+{
+  "name": "zarqaapi",
+  "module": "index.ts",
+  "type": "module",
+  "scripts": {
+    "dev": "bun run --watch src/index.js",
+    "start": "bun run src/index.js"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "pino": "^9.6.0",
+    "prisma": "^6.2.1"
+  },
+  "dependencies": {
+    "@hono/zod-validator": "^0.4.2",
+    "@prisma/client": "^6.2.1",
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "hono": "^4.6.16",
+    "jsonwebtoken": "^9.0.2",
+    "mongodb": "^6.12.0",
+    "pino-pretty": "^13.0.0",
+    "prisma": "^6.2.1",
+    "zod": "^3.24.1"
+  }
+}
