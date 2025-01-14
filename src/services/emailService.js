@@ -3,7 +3,7 @@ import { sendEmail } from "../config/emailConfig.js";
 export const emailService = {
   // Email Verifikasi
   sendVerificationEmail: async (user, verificationToken) => {
-    const verificationUrl = `${process.env.APP_URL}/verify-email?token=${verificationToken}`;
+    const verificationUrl = `${process.env.APP_URL}/api/auth/verify-email?token=${verificationToken}`;
     //const verificationUrl = `${process.env.FRONTEND_URL}/verify-email?token=${verificationToken}`;
 
     await sendEmail({
