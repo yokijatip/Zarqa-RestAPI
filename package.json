@@ -1,6 +1,6 @@
 {
   "name": "zarqaapi",
-  "module": "index.ts",
+  "module": "src/index.ts",
   "type": "module",
   "scripts": {
     "dev": "bun run --watch src/index.js",
