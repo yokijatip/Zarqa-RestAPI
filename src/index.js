@@ -50,10 +50,15 @@ app.onError(errorHandler);
 
 // Start Server
 const port = process.env.PORT || 3000;
-console.log(`Server running on http://localhost:${port}`);
+// console.log(`Server running on http://localhost:${port}`);
+console.log(
+  `Server running on https://zarqa-restapi-production.up.railway.app/api`
+);
 
 // Add pino logger for server events
-log.info(`Server started on http://localhost:${port}`);
+log.info(
+  `Server started on htttps://zarqa-restapi-production.up.railway.app/api`
+);
 
 serve(
   {
