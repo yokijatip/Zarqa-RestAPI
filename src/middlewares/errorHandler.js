@@ -1,4 +1,4 @@
-import { formatErrorResponse } from "../utils/responseFormatter";
+import { formatErrorResponse } from "../utils/responseFormatter.js";
 
 export const errorHandler = async (err, c) => {
   console.error("Error:", err);

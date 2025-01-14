@@ -3,7 +3,7 @@ import { z } from "zod";
 import {
   formatErrorResponse,
   formatResponse,
-} from "../utils/responseFormatter";
+} from "../utils/responseFormatter.js";
 
 const prisma = new PrismaClient();
 

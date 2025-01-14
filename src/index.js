@@ -1,4 +1,5 @@
 import { Hono } from "hono";
+import { serve } from "@hono/node-server";
 import { cors } from "hono/cors";
 import pino from "pino";
 import { logger } from "hono/logger";
@@ -6,8 +7,8 @@ import { PrismaClient } from "@prisma/client";
 import userRouter from "./routes/userRoutes.js";
 import authRouter from "./routes/authRoutes.js";
 import fileRouter from "./routes/fileRoutes.js";
-import { rateLimitMiddleware } from "./middlewares/rateLimitMiddleware";
-import { errorHandler } from "./middlewares/errorHandler";
+import { rateLimitMiddleware } from "./middlewares/rateLimitMiddleware.js";
+import { errorHandler } from "./middlewares/errorHandler.js";
 
 // Inisialisasi Hono
 const app = new Hono();
@@ -51,7 +52,15 @@ app.onError(errorHandler);
 const port = process.env.PORT || 3000;
 console.log(`Server running on http://localhost:${port}`);
 
-export default {
-  port,
-  fetch: app.fetch,
-};
+// Add pino logger for server events
+log.info(`Server started on http://localhost:${port}`);
+
+serve(
+  {
+    fetch: app.fetch,
+    port,
+  },
+  () => {
+    log.info(`Server is ready to accept connections`);
+  }
+);

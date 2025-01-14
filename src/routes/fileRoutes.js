@@ -1,6 +1,6 @@
 import { Hono } from "hono";
-import { fileController } from "../controllers/fileController";
-import { authMiddleware } from "../middlewares/authMiddleware";
+import { fileController } from "../controllers/fileController.js";
+import { authMiddleware } from "../middlewares/authMiddleware.js";
 
 const fileRouter = new Hono();
 

@@ -1,5 +1,5 @@
-import { verifyToken } from "../config/jwt";
-import { formatErrorResponse } from "../utils/responseFormatter";
+import { verifyToken } from "../config/jwt.js";
+import { formatErrorResponse } from "../utils/responseFormatter.js";
 
 export const authMiddleware = async (c, next) => {
   try {

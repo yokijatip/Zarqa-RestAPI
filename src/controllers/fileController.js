@@ -2,8 +2,8 @@ import { PrismaClient } from "@prisma/client";
 import {
   formatResponse,
   formatErrorResponse,
-} from "../utils/responseFormatter";
-import { validateFile } from "../utils/fileValidator";
+} from "../utils/responseFormatter.js";
+import { validateFile } from "../utils/fileValidator.js";
 import { writeFile, mkdir } from "node:fs/promises";
 import { join } from "node:path";
 

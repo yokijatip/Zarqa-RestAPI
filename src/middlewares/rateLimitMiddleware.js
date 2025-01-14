@@ -1,5 +1,5 @@
 import { RateLimiterMemory } from "rate-limiter-flexible";
-import { formatErrorResponse } from "../utils/responseFormatter";
+import { formatErrorResponse } from "../utils/responseFormatter.js";
 
 const rateLimiter = new RateLimiterMemory({
   points: 200, // Jumlah Request yang di inginkan
