@@ -1,20 +1,25 @@
 import { sendEmail } from "../config/emailConfig.js";
 
+const BASE_URL = "https://zarqa-restapi-production.up.railway.app";
+// const BASE_URL = "http://localhost:3000"; // Development URL
+
 export const emailService = {
   // Email Verifikasi
   sendVerificationEmail: async (user, verificationToken) => {
-    const verificationUrl = `https://zarqa-restapi-production.up.railway.app/api/auth/verify-email?token=${verificationToken}`;
+    const verificationUrl = `${BASE_URL}/api/auth/verify-email?token=${verificationToken}`;
     //const verificationUrl = `${process.env.FRONTEND_URL}/verify-email?token=${verificationToken}`;
 
     await sendEmail({
       to: user.email,
       subject: "Email Verification",
       html: `
-        </h1>Email Verification</h1>
+        <h1>Password Reset</h1>
         <p>Hi ${user.name},</p>
-        <p>Please click the link below to verify your email address:</p>
-        <p>Tolong klik link dibawah ini ya guna memverifikasi alamat email:</p>
-        <a href="${verificationUrl}">Verify Email</a>
+        <p>Please click the link below to reset your password:</p>
+        <p>Mohon klik link dibawah ini untuk reset password anda</p>
+        <a href="${resetUrl}">Reset Password</a>
+        <p>Jika button diatas tidak berfungsi, copy dan paste link berikut di browser Anda:</p>
+        <p>${resetUrl}</p>
       `,
     });
   },
