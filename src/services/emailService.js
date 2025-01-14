@@ -26,7 +26,7 @@ export const emailService = {
 
   //   Reset Password
   sendResetPasswordEmail: async (user, resetToken) => {
-    const resetUrl = `${process.env.APP_URL}/reset-password?token=${resetToken}`;
+    const resetUrl = `${BASE_URL}/reset-password?token=${resetToken}`;
 
     await sendEmail({
       to: user.email,
