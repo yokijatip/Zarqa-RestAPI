@@ -13,13 +13,13 @@ export const emailService = {
       to: user.email,
       subject: "Email Verification",
       html: `
-        <h1>Password Reset</h1>
+        <h1>Email Verification</h1>
         <p>Hi ${user.name},</p>
-        <p>Please click the link below to reset your password:</p>
-        <p>Mohon klik link dibawah ini untuk reset password anda</p>
-        <a href="${resetUrl}">Reset Password</a>
+        <p>Please click the link below to verify your email address:</p>
+        <p>Tolong klik link dibawah ini ya guna memverifikasi alamat email:</p>
+        <a href="${verificationUrl}">Verify Email</a>
         <p>Jika button diatas tidak berfungsi, copy dan paste link berikut di browser Anda:</p>
-        <p>${resetUrl}</p>
+        <p>${verificationUrl}</p>
       `,
     });
   },
