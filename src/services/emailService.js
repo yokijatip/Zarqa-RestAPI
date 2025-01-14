@@ -1,6 +1,6 @@
 import { sendEmail } from "../config/emailConfig.js";
 
-const BASE_URL = "https://zarqa-restapi-production-v2.up.railway.app";
+const BASE_URL = "https://zarqa-restapi-production.up.railway.app";
 
 export const emailService = {
   // Email Verifikasi
