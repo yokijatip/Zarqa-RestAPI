@@ -4,7 +4,8 @@
   "type": "module",
   "scripts": {
     "dev": "bun run --watch src/index.js",
-    "start": "bun run src/index.js"
+    "start": "bun run src/index.js",
+    "build": "bun build ./src/index.js"
   },
   "devDependencies": {
     "@types/bun": "latest",
