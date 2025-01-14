@@ -4,9 +4,11 @@ WORKDIR /app
 
 # Copy package files
 COPY package.json bun.lockb ./
+
+# Install dependencies using bun
 RUN bun install
 
-# Copy app files
+# Copy rest of the app
 COPY . .
 
 # Set environment variables
