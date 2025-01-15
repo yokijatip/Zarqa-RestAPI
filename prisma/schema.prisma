@@ -20,7 +20,7 @@ model User {
   name                 String
   password             String
   role                 String        @default("user")
-  profileImageUrl      String
+  profileImageUrl      String?
   isEmailVerified      Boolean       @default(false)
   verificationToken    String?
   resetPasswordToken   String?
