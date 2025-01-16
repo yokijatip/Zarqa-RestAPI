@@ -160,7 +160,7 @@ export const authController = {
       const otpExpires = new Date(Date.now() + 15 * 60 * 1000); // 15 minutes
 
       // Save OTP to database
-      await prisma.user.update({
+      const updatedUser = await prisma.user.update({
         where: { id: user.id },
         data: {
           resetOTP: otp,
@@ -174,13 +174,7 @@ export const authController = {
       return c.json(
         formatResponse(
           {
-            data: {
-              user: {
-                id: user.id,
-                email: user.email,
-                name: user.name,
-              },
-            },
+            user: updatedUser,
           },
           "OTP has been sent to your email.",
           200
