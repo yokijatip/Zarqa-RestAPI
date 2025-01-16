@@ -2,7 +2,7 @@ import { PrismaClient } from "@prisma/client";
 import { z } from "zod";
 import bcrypt from "bcryptjs";
 import crypto from "crypto";
-import { generateToken } from "../config/jwt.js";
+import { generateToken, verifyToken } from "../config/jwt.js";
 import {
   formatResponse,
   formatErrorResponse,
@@ -223,35 +223,58 @@ export const authController = {
   },
 
   // Reset password with verified OTP
+  // Reset password with verified OTP
   resetPassword: async (c) => {
     try {
       const { token, newPassword } = await c.req.json();
 
-      // Verify token
-      const decoded = verifyToken(token);
-      if (decoded.purpose !== "reset-password") {
-        throw new Error("Invalid token purpose");
+      // Verify token dengan proper error handling
+      let decoded;
+      try {
+        decoded = verifyToken(token);
+        if (
+          !decoded ||
+          !decoded.userId ||
+          decoded.purpose !== "reset-password"
+        ) {
+          return c.json(
+            formatErrorResponse(new Error("Invalid or expired token"), 401),
+            401
+          );
+        }
+      } catch (tokenError) {
+        return c.json(
+          formatErrorResponse(new Error("Invalid token format"), 401),
+          401
+        );
       }
 
       const hashedPassword = await bcrypt.hash(newPassword, 10);
 
-      // Update password and clear OTP
-      await prisma.user.update({
+      // Update password dan ambil updated user
+      const updatedUser = await prisma.user.update({
         where: { id: decoded.userId },
         data: {
           password: hashedPassword,
           resetOTP: null,
           resetOTPExpires: null,
         },
+        select: {
+          id: true,
+          email: true,
+          name: true,
+          role: true,
+        },
       });
 
       return c.json(
         formatResponse(
-          { user },
+          { user: updatedUser },
           "Password reset successful. You can now login with your new password."
         )
       );
     } catch (error) {
+      console.error("Reset password error:", error);
       return c.json(formatErrorResponse(error), 500);
     }
   },
