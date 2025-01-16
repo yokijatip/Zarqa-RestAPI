@@ -247,7 +247,7 @@ export const authController = {
 
       return c.json(
         formatResponse(
-          null,
+          { user },
           "Password reset successful. You can now login with your new password."
         )
       );
