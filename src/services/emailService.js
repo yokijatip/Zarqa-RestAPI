@@ -35,30 +35,61 @@ export const emailService = {
   },
 
   // Reset Password
-  sendResetPasswordEmail: async (user, resetToken) => {
-    const resetUrl = `${BASE_URL}/api/auth/reset-password?token=${resetToken}`;
+  // sendResetPasswordEmail: async (user, resetToken) => {
+  //   const resetUrl = `${BASE_URL}/api/auth/reset-password?token=${resetToken}`;
 
+  //   await sendEmail({
+  //     to: user.email,
+  //     subject: "Reset Password",
+  //     html: `
+  //       <div style="font-family: Arial, sans-serif; padding: 20px; max-width: 600px; margin: auto;">
+  //         <h2 style="color: #333; text-align: center;">Reset Password</h2>
+  //         <p style="font-size: 16px;">Hi ${user.name},</p>
+  //         <p style="font-size: 16px;">Please click the link below to reset your password:</p>
+  //         <p style="font-size: 16px;">Mohon klik link dibawah ini untuk reset password Anda:</p>
+  //         <div style="text-align: center; margin: 30px 0;">
+  //           <a href="${resetUrl}"
+  //              style="background-color: #e74c3c; color: white; padding: 12px 25px;
+  //                     text-decoration: none; border-radius: 5px; font-size: 16px;">
+  //             Reset Password
+  //           </a>
+  //         </div>
+  //         <p style="font-size: 14px; color: #666;">Jika tombol di atas tidak berfungsi, copy dan paste link berikut di browser Anda:</p>
+  //         <p style="font-size: 14px; color: #666; word-break: break-all;">${resetUrl}</p>
+  //         <hr style="border: 1px solid #eee; margin: 30px 0;">
+  //         <p style="font-size: 12px; color: #999; text-align: center;">
+  //           Link ini akan kadaluarsa dalam 1 jam. Jika Anda tidak meminta reset password, abaikan email ini.
+  //         </p>
+  //       </div>
+  //     `,
+  //   });
+  // },
+
+  // Send OTP Reset Password
+  sendResetPasswordOTP: async (user, otp) => {
     await sendEmail({
       to: user.email,
-      subject: "Reset Password",
+      subject: "Kode Reset Password OTP",
       html: `
         <div style="font-family: Arial, sans-serif; padding: 20px; max-width: 600px; margin: auto;">
           <h2 style="color: #333; text-align: center;">Reset Password</h2>
           <p style="font-size: 16px;">Hi ${user.name},</p>
-          <p style="font-size: 16px;">Please click the link below to reset your password:</p>
-          <p style="font-size: 16px;">Mohon klik link dibawah ini untuk reset password Anda:</p>
+          <p style="font-size: 16px;">Ini adalah Reset OTP Password Anda:</p>
           <div style="text-align: center; margin: 30px 0;">
-            <a href="${resetUrl}" 
-               style="background-color: #e74c3c; color: white; padding: 12px 25px; 
-                      text-decoration: none; border-radius: 5px; font-size: 16px;">
-              Reset Password
-            </a>
+            <div style="background-color: #f8f9fa; padding: 20px; font-size: 32px; 
+                        letter-spacing: 8px; font-weight: bold; color: #333;">
+              ${otp}
+            </div>
           </div>
-          <p style="font-size: 14px; color: #666;">Jika tombol di atas tidak berfungsi, copy dan paste link berikut di browser Anda:</p>
-          <p style="font-size: 14px; color: #666; word-break: break-all;">${resetUrl}</p>
+          <p style="font-size: 14px; color: #666;">
+            Kode OTP ini akan berlaku 15 Menit, jangan berikan kode ini kepada siapapun.
+          </p>
+          <p style="font-size: 14px; color: #666;">
+           Jika anda tidak meminta Lupa Kata sandi maka abaikan Email ini
+          </p>
           <hr style="border: 1px solid #eee; margin: 30px 0;">
           <p style="font-size: 12px; color: #999; text-align: center;">
-            Link ini akan kadaluarsa dalam 1 jam. Jika Anda tidak meminta reset password, abaikan email ini.
+            © ${new Date().getFullYear()} My Zarqa. All rights reserved.
           </p>
         </div>
       `,

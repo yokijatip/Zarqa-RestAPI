@@ -13,6 +13,12 @@ const prisma = new PrismaClient();
 
 // Generate random token
 const generateRandomToken = () => crypto.randomBytes(32).toString("hex");
+
+// Generate OTP
+const generateOTP = () => {
+  return Math.floor(1000 + Math.random() * 9000).toString();
+};
+
 // Validation Schema
 const registerSchema = z.object({
   email: z.string().email(),
@@ -138,43 +144,42 @@ export const authController = {
 
       if (!user) {
         return c.json(
-          formatResponse(
-            null,
-            "If an account exists with this email, a password reset link will be sent."
-          )
+          formatResponse(null, "Jika akun nya ada maka kode OTP akan dikirim.")
         );
       }
 
-      const resetToken = generateRandomToken();
-      const resetExpires = new Date(Date.now() + 3600000); // 1 hour
+      // Generate OTP
+      const otp = generateOTP();
+      const otpExpires = new Date(Date.now() + 15 * 60 * 1000); // 15 minutes
 
+      // Save OTP to database
       await prisma.user.update({
         where: { id: user.id },
         data: {
-          resetPasswordToken: resetToken,
-          resetPasswordExpires: resetExpires,
+          resetOTP: otp,
+          resetOTPExpires: otpExpires,
         },
       });
 
-      await emailService.sendResetPasswordEmail(user, resetToken);
+      // Send OTP via email
+      await emailService.sendResetPasswordOTP(user, otp);
 
-      return c.json(
-        formatResponse(null, "Password reset link sent to your email.")
-      );
+      return c.json(formatResponse(null, "OTP sudah dikirim di email."));
     } catch (error) {
       return c.json(formatErrorResponse(error), 500);
     }
   },
 
-  // Reset password
-  resetPassword: async (c) => {
+  // Verify OTP
+  verifyOTP: async (c) => {
     try {
-      const { token, newPassword } = await c.req.json();
+      const { email, otp } = await c.req.json();
 
       const user = await prisma.user.findFirst({
         where: {
-          resetPasswordToken: token,
-          resetPasswordExpires: {
+          email,
+          resetOTP: otp,
+          resetOTPExpires: {
             gt: new Date(),
           },
         },
@@ -182,19 +187,45 @@ export const authController = {
 
       if (!user) {
         return c.json(
-          formatErrorResponse(new Error("Invalid or expired reset token"), 400),
+          formatErrorResponse(new Error("Invalid or expired OTP"), 400),
           400
         );
       }
 
+      // Generate temporary token for password reset
+      const tempToken = generateToken(
+        { userId: user.id, purpose: "reset-password" },
+        "15m"
+      );
+
+      return c.json(
+        formatResponse({ token: tempToken }, "OTP verified successfully")
+      );
+    } catch (error) {
+      return c.json(formatErrorResponse(error), 500);
+    }
+  },
+
+  // Reset password with verified OTP
+  resetPassword: async (c) => {
+    try {
+      const { token, newPassword } = await c.req.json();
+
+      // Verify token
+      const decoded = verifyToken(token);
+      if (decoded.purpose !== "reset-password") {
+        throw new Error("Invalid token purpose");
+      }
+
       const hashedPassword = await bcrypt.hash(newPassword, 10);
 
+      // Update password and clear OTP
       await prisma.user.update({
-        where: { id: user.id },
+        where: { id: decoded.userId },
         data: {
           password: hashedPassword,
-          resetPasswordToken: null,
-          resetPasswordExpires: null,
+          resetOTP: null,
+          resetOTPExpires: null,
         },
       });
 
