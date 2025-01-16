@@ -174,7 +174,7 @@ export const authController = {
       return c.json(
         formatResponse(
           {
-            user: updatedUser,
+            user: updatedUser.email,
           },
           "OTP has been sent to your email.",
           200
