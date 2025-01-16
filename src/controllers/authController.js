@@ -144,7 +144,14 @@ export const authController = {
 
       if (!user) {
         return c.json(
-          formatResponse(null, "Jika akun nya ada maka kode OTP akan dikirim.")
+          formatResponse(
+            {
+              data: {
+                user: null,
+              },
+            },
+            "If an account exists with this email, an OTP will be sent."
+          )
         );
       }
 
@@ -164,7 +171,22 @@ export const authController = {
       // Send OTP via email
       await emailService.sendResetPasswordOTP(user, otp);
 
-      return c.json(formatResponse(null, "OTP sudah dikirim di email."));
+      return c.json(
+        formatResponse(
+          {
+            data: {
+              user: {
+                id: user.id,
+                email: user.email,
+                name: user.name,
+              },
+            },
+          },
+          "OTP has been sent to your email.",
+          200
+        ),
+        200
+      );
     } catch (error) {
       return c.json(formatErrorResponse(error), 500);
     }
