@@ -31,4 +31,4 @@ async function addContent(data) {
   }
 }
 
-export { addContent };
+export default addContent;
