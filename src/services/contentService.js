@@ -13,7 +13,7 @@ const contentSchema = z.object({
   image: z.string().url({ message: "Invalid image URL" }),
   content: z
     .string()
-    .min(10, { message: "Content must be at least 10 characters" }),
+    .min(3, { message: "Content must be at least 3 characters" }),
 });
 
 export async function addContent(data) {
