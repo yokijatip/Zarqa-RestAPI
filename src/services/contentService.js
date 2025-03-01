@@ -31,4 +31,34 @@ async function addContent(data) {
   }
 }
 
-export default addContent;
+// Fungsi untuk mendapatkan semua konten
+export async function getAllContents() {
+  try {
+    const contents = await prisma.content.findMany({
+      orderBy: {
+        createdAt: "desc", // Urutkan berdasarkan waktu pembuatan (terbaru dulu)
+      },
+    });
+    return contents;
+  } catch (error) {
+    throw error;
+  }
+}
+
+// Fungsi untuk menghapus konten berdasarkan ID
+export async function deleteContentById(id) {
+  try {
+    const deletedContent = await prisma.content.delete({
+      where: {
+        id: id, // Gunakan ID sebagai primary key
+      },
+    });
+    if (!deletedContent) {
+      throw new Error("Content not found");
+    }
+  } catch (error) {
+    throw error;
+  }
+}
+
+export default { addContent, getAllContents, deleteContentById };
