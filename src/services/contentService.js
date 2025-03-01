@@ -38,6 +38,7 @@ export async function addContent(data) {
 }
 
 // Fungsi untuk mendapatkan semua konten
+// Fungsi untuk mendapatkan semua konten
 export async function getAllContents() {
   try {
     const contents = await prisma.content.findMany({

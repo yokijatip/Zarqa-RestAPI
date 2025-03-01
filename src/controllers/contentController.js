@@ -25,9 +25,15 @@ contentController.post("/add", async (c) => {
 contentController.get("/all", async (c) => {
   try {
     const contents = await getAllContents();
+    console.log("Data sent to frontend:", contents); // Logging data
+
+    if (!contents || contents.length === 0) {
+      return c.json({ success: true, data: [] }, 200); // Kembalikan array kosong jika tidak ada data
+    }
+
     return c.json({ success: true, data: contents }, 200);
   } catch (error) {
-    console.error(error);
+    console.error("Error in /all route:", error);
     return c.json({ success: false, message: error.message }, 500);
   }
 });
