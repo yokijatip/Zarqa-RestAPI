@@ -1,7 +1,9 @@
 import { Hono } from "hono";
-import addContent from "../services/contentService.js";
-import getAllContents from "../services/contentService.js";
-import deleteContentById from "../services/contentService.js";
+import {
+  addContent,
+  getAllContents,
+  deleteContentById,
+} from "../services/contentService.js";
 
 const contentController = new Hono();
 
