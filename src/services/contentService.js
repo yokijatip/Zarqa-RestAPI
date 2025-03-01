@@ -1,6 +1,5 @@
 import { PrismaClient } from "@prisma/client";
 import { z } from "zod";
-import addContent from "../controllers/contentController.js";
 
 const prisma = new PrismaClient();
 
