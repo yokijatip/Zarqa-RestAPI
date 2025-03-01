@@ -74,6 +74,7 @@ model Content {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   title     String
   image     String?
+  category  String   @default("other")
   content   String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
