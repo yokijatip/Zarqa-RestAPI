@@ -10,6 +10,9 @@ import fileRouter from "./routes/fileRoutes.js";
 import { rateLimitMiddleware } from "./middlewares/rateLimitMiddleware.js";
 import { errorHandler } from "./middlewares/errorHandler.js";
 
+// Content Controller
+const contentController = require("./controllers/contentController.js");
+
 // Inisialisasi Hono
 const app = new Hono();
 
@@ -44,6 +47,7 @@ app.get("/", (c) => {
 app.route("/api/auth", authRouter);
 app.route("/api/users", userRouter);
 app.route("/api/files", fileRouter);
+app.route("/api/content", contentController);
 
 // Error Handling
 app.onError(errorHandler);
