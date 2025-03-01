@@ -24,16 +24,19 @@ contentController.post("/add", async (c) => {
 // Route untuk mendapatkan semua konten
 contentController.get("/all", async (c) => {
   try {
-    const contents = await getAllContents();
-    console.log("Data sent to frontend:", contents); // Logging data
+    console.log("Fetching all contents..."); // Logging awal
 
-    if (!contents || contents.length === 0) {
-      return c.json({ success: true, data: [] }, 200); // Kembalikan array kosong jika tidak ada data
+    const contents = await getAllContents();
+    console.log("Fetched contents:", contents); // Logging data yang diterima dari service
+
+    if (!Array.isArray(contents)) {
+      console.error("Expected an array but got:", contents);
+      return c.json({ success: false, message: "Invalid data format" }, 500);
     }
 
-    return c.json({ success: true, data: contents }, 200);
+    return c.json({ success: true, data: contents }, 200); // Pastikan `data` adalah array
   } catch (error) {
-    console.error("Error in /all route:", error);
+    console.error("Error in /all route:", error.message); // Logging error
     return c.json({ success: false, message: error.message }, 500);
   }
 });

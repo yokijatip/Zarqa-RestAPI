@@ -38,16 +38,20 @@ export async function addContent(data) {
 }
 
 // Fungsi untuk mendapatkan semua konten
-// Fungsi untuk mendapatkan semua konten
 export async function getAllContents() {
   try {
+    console.log("Querying database for all contents..."); // Logging awal
+
     const contents = await prisma.content.findMany({
       orderBy: {
         createdAt: "desc", // Urutkan berdasarkan waktu pembuatan (terbaru dulu)
       },
     });
-    return contents;
+
+    console.log("Database query result:", contents); // Logging hasil query
+    return contents; // Pastikan ini mengembalikan array
   } catch (error) {
+    console.error("Error fetching contents from database:", error.message); // Logging error
     throw error;
   }
 }
