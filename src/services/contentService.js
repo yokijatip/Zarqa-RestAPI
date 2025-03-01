@@ -32,7 +32,7 @@ async function addContent(data) {
 }
 
 // Fungsi untuk mendapatkan semua konten
-export async function getAllContents() {
+async function getAllContents() {
   try {
     const contents = await prisma.content.findMany({
       orderBy: {
@@ -46,7 +46,7 @@ export async function getAllContents() {
 }
 
 // Fungsi untuk menghapus konten berdasarkan ID
-export async function deleteContentById(id) {
+async function deleteContentById(id) {
   try {
     const deletedContent = await prisma.content.delete({
       where: {
