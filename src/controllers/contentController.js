@@ -11,12 +11,11 @@ contentController.post("/add", async (c) => {
     const body = await c.req.json();
     console.log("Data received from frontend:", body); // Logging data
 
-    if (!body || typeof body !== "object") {
-      throw new Error("Invalid payload: Expected an object");
-    }
+    // Validasi input menggunakan Zod
+    const validatedData = contentSchema.parse(body);
 
     // Panggil service untuk menambahkan konten
-    const newContent = await addContent(body);
+    const newContent = await addContent(validatedData);
 
     // Ambil semua konten setelah penambahan
     const allContents = await getAllContents();
@@ -31,19 +30,10 @@ contentController.post("/add", async (c) => {
 // Route untuk mendapatkan semua konten
 contentController.get("/all", async (c) => {
   try {
-    console.log("Fetching all contents..."); // Logging awal
-
     const contents = await getAllContents();
-    console.log("Fetched contents:", contents); // Logging data yang diterima dari service
-
-    if (!Array.isArray(contents)) {
-      console.error("Expected an array but got:", contents);
-      return c.json({ success: false, message: "Invalid data format" }, 500);
-    }
-
-    return c.json({ success: true, data: contents }, 200); // Pastikan `data` adalah array
+    return c.json({ success: true, data: contents }, 200);
   } catch (error) {
-    console.error("Error in /all route:", error.message); // Logging error
+    console.error("Error in /all route:", error);
     return c.json({ success: false, message: error.message }, 500);
   }
 });
@@ -59,6 +49,21 @@ contentController.delete("/delete/:id", async (c) => {
     );
   } catch (error) {
     console.error(error);
+    return c.json({ success: false, message: error.message }, 400);
+  }
+});
+
+contentController.delete("/delete/:id", async (c) => {
+  try {
+    const { id } = c.req.param(); // Ambil ID dari parameter URL
+    await deleteContentById(id);
+
+    // Ambil semua konten setelah penghapusan
+    const allContents = await getAllContents();
+
+    return c.json({ success: true, data: allContents }, 200);
+  } catch (error) {
+    console.error("Error in /delete route:", error);
     return c.json({ success: false, message: error.message }, 400);
   }
 });
