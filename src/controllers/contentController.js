@@ -1,7 +1,10 @@
 import { Hono } from "hono";
-import addContent from "../services/contentService.js";
-import getAllContents from "../services/contentService.js";
-import deleteContentById from "../services/contentService.js";
+import {
+  addContent,
+  getAllContents,
+  deleteContentById,
+  contentSchema,
+} from "../services/contentService.js";
 
 const contentController = new Hono();
 
@@ -9,21 +12,35 @@ const contentController = new Hono();
 contentController.post("/add", async (c) => {
   try {
     const body = await c.req.json();
-    console.log("Data received from frontend:", body); // Logging data
+    console.log("Data received from frontend:", body);
 
-    // Validasi input menggunakan Zod
-    const validatedData = contentSchema.parse(body);
-
-    // Panggil service untuk menambahkan konten
-    const newContent = await addContent(validatedData);
-
-    // Ambil semua konten setelah penambahan
-    const allContents = await getAllContents();
-
-    return c.json({ success: true, data: allContents }, 201);
+    // Validasi dengan error handling yang lebih baik
+    try {
+      const validatedData = contentSchema.parse(body);
+      const newContent = await addContent(validatedData);
+      const allContents = await getAllContents();
+      return c.json({ success: true, data: allContents }, 201);
+    } catch (validationError) {
+      console.error("Validation error:", validationError);
+      return c.json(
+        {
+          success: false,
+          message: "Validation failed",
+          errors: validationError.errors || validationError.message,
+        },
+        400
+      );
+    }
   } catch (error) {
     console.error("Error in /add route:", error);
-    return c.json({ success: false, message: error.message }, 400);
+    return c.json(
+      {
+        success: false,
+        message: "Failed to process request",
+        error: error.message,
+      },
+      400
+    );
   }
 });
 
@@ -39,20 +56,6 @@ contentController.get("/all", async (c) => {
 });
 
 // Route untuk menghapus konten berdasarkan ID
-contentController.delete("/delete/:id", async (c) => {
-  try {
-    const { id } = c.req.param(); // Ambil ID dari parameter URL
-    await deleteContentById(id);
-    return c.json(
-      { success: true, message: "Content deleted successfully" },
-      200
-    );
-  } catch (error) {
-    console.error(error);
-    return c.json({ success: false, message: error.message }, 400);
-  }
-});
-
 contentController.delete("/delete/:id", async (c) => {
   try {
     const { id } = c.req.param(); // Ambil ID dari parameter URL

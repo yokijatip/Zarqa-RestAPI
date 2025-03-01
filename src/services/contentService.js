@@ -4,8 +4,7 @@ import { z } from "zod";
 const prisma = new PrismaClient();
 
 // Skema Validasi untuk input konten
-// Skema validasi untuk input konten
-const contentSchema = z.object({
+export const contentSchema = z.object({
   title: z.string().min(3, { message: "Title must be at least 3 characters" }),
   category: z
     .string()
@@ -51,15 +50,14 @@ export async function deleteContentById(id) {
   try {
     const deletedContent = await prisma.content.delete({
       where: {
-        id: id, // Gunakan ID sebagai primary key
+        id: parseInt(id), // Konversi id ke number jika perlu
       },
     });
     if (!deletedContent) {
       throw new Error("Content not found");
     }
+    return deletedContent;
   } catch (error) {
     throw error;
   }
 }
-
-export default addContent;
