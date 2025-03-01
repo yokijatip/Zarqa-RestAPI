@@ -4,24 +4,30 @@ import { z } from "zod";
 const prisma = new PrismaClient();
 
 // Skema Validasi untuk input konten
+// Skema validasi untuk input konten
 const contentSchema = z.object({
-  title: z.string().min(2, { message: "Title mus be at least 3 characters" }),
-  image: z.string().url().optional(),
-  content: z.string().optional(),
+  title: z.string().min(3, { message: "Title must be at least 3 characters" }),
+  category: z
+    .string()
+    .min(3, { message: "Category must be at least 3 characters" }),
+  image: z.string().url({ message: "Invalid image URL" }),
+  content: z
+    .string()
+    .min(10, { message: "Content must be at least 10 characters" }),
 });
 
-// Fungsi untuk menambahkan konten baru
-async function addContent(data) {
+export async function addContent(data) {
   try {
     // Validasi input
-    const validateData = contentSchema.parse(data);
+    const validatedData = contentSchema.parse(data);
 
-    // Menambahkan konten baru ke database
+    // Simpan data ke database
     const newContent = await prisma.content.create({
       data: {
-        title: validateData.title,
-        image: validateData.image || null,
-        content: validateData.content,
+        title: validatedData.title,
+        category: validatedData.category,
+        image: validatedData.image,
+        content: validatedData.content,
       },
     });
 

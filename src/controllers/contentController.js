@@ -9,13 +9,14 @@ const contentController = new Hono();
 contentController.post("/add", async (c) => {
   try {
     const body = await c.req.json();
+    console.log("Data received from frontend:", body); // Logging data
 
     // Panggil service untuk menambahkan konten
     const newContent = await addContent(body);
 
     return c.json({ success: true, data: newContent }, 201);
   } catch (error) {
-    console.error(error);
+    console.error("Error in /add route:", error);
     return c.json({ success: false, message: error.message }, 400);
   }
 });
