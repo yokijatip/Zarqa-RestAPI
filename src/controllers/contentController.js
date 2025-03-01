@@ -1,6 +1,6 @@
-const { Hono } = require("hono");
-const { addContent } = require("../services/contentService.js");
-const { upload } = require("../middlewares/uploadMiddleware.js");
+import { Hono } from "hono";
+import { addContent } from "../services/contentService.js";
+import { upload } from "../middlewares/uploadMiddleware.js";
 
 const contentController = new Hono();
 
@@ -32,4 +32,4 @@ contentController.post("/add", upload.single("image"), async (c) => {
   }
 });
 
-module.exports = contentController;
+export default contentController;

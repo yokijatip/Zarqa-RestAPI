@@ -11,7 +11,7 @@ import { rateLimitMiddleware } from "./middlewares/rateLimitMiddleware.js";
 import { errorHandler } from "./middlewares/errorHandler.js";
 
 // Content Controller
-const contentController = require("./controllers/contentController.js");
+import contentController from "./controllers/contentController.js";
 
 // Inisialisasi Hono
 const app = new Hono();
