@@ -6,10 +6,8 @@ const prisma = new PrismaClient();
 // Skema Validasi untuk input konten
 const contentSchema = z.object({
   title: z.string().min(2, { message: "Title mus be at least 3 characters" }),
-  image: z.string().optional(),
-  content: z
-    .string()
-    .min(10, { message: "Content must be at least 10 characters" }),
+  image: z.string().url().optional(),
+  content: z.string().optional(),
 });
 
 // Fungsi untuk menambahkan konten baru
