@@ -11,10 +11,17 @@ contentController.post("/add", async (c) => {
     const body = await c.req.json();
     console.log("Data received from frontend:", body); // Logging data
 
+    if (!body || typeof body !== "object") {
+      throw new Error("Invalid payload: Expected an object");
+    }
+
     // Panggil service untuk menambahkan konten
     const newContent = await addContent(body);
 
-    return c.json({ success: true, data: newContent }, 201);
+    // Ambil semua konten setelah penambahan
+    const allContents = await getAllContents();
+
+    return c.json({ success: true, data: allContents }, 201);
   } catch (error) {
     console.error("Error in /add route:", error);
     return c.json({ success: false, message: error.message }, 400);

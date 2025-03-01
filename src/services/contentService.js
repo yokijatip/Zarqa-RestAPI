@@ -18,19 +18,14 @@ const contentSchema = z.object({
 
 export async function addContent(data) {
   try {
-    // Validasi input
-    const validatedData = contentSchema.parse(data);
-
-    // Simpan data ke database
     const newContent = await prisma.content.create({
       data: {
-        title: validatedData.title,
-        category: validatedData.category,
-        image: validatedData.image,
-        content: validatedData.content,
+        title: data.title,
+        category: data.category,
+        image: data.image,
+        content: data.content,
       },
     });
-
     return newContent;
   } catch (error) {
     throw error;
@@ -40,18 +35,13 @@ export async function addContent(data) {
 // Fungsi untuk mendapatkan semua konten
 export async function getAllContents() {
   try {
-    console.log("Querying database for all contents..."); // Logging awal
-
     const contents = await prisma.content.findMany({
       orderBy: {
         createdAt: "desc", // Urutkan berdasarkan waktu pembuatan (terbaru dulu)
       },
     });
-
-    console.log("Database query result:", contents); // Logging hasil query
     return contents; // Pastikan ini mengembalikan array
   } catch (error) {
-    console.error("Error fetching contents from database:", error.message); // Logging error
     throw error;
   }
 }
