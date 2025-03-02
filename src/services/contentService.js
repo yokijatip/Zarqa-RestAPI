@@ -50,7 +50,7 @@ export async function deleteContentById(id) {
   try {
     const deletedContent = await prisma.content.delete({
       where: {
-        id: id,
+        id: String(id),
       },
     });
     if (!deletedContent) {
