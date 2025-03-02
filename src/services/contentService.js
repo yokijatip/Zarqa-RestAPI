@@ -50,7 +50,7 @@ export async function deleteContentById(id) {
   try {
     const deletedContent = await prisma.content.delete({
       where: {
-        id: parseInt(id), // Konversi id ke number jika perlu
+        id: id,
       },
     });
     if (!deletedContent) {
